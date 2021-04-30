@@ -25,14 +25,13 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 @app.route('/')
 def hello_world():
+    """Web Appデプロイ確認用。LINE Botとしては不要。 """
     return 'Hello world!'
 
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    """
-    Webhookからのリクエストの正当性をチェックし、ハンドラに応答処理を移譲する
-    """
+    """ Webhookからのリクエストの正当性をチェックし、ハンドラに応答処理を移譲する """
 
     # リクエストヘッダーから署名検証のための値を取得します。
     signature = request.headers['X-Line-Signature']
@@ -73,6 +72,7 @@ if __name__ == "__main__":
     arg_parser = ArgumentParser(
         usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
     )
+    # Herokuは環境変数PORTのポートで起動したWeb Appの起動を待ち受けるため、そのポート番号でApp起動する
     arg_parser.add_argument('-p', '--port', type=int,
                             default=int(os.environ.get('PORT', 8000)), help='port')
     arg_parser.add_argument('-d', '--debug', default=False, help='debug')
