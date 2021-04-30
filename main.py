@@ -43,7 +43,7 @@ def callback():
 
     # handle webhook body
     try:
-        Handler.handle(body, signature)
+        handler.handle(body, signature)
     # 署名検証で失敗した場合、例外を出す。
     except InvalidSignatureError:
         app.logger.warn("Invalid Signature.")
