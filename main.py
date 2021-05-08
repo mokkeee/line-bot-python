@@ -8,6 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
+    UnfollowEvent, FollowEvent,
 )
 import os
 from argparse import ArgumentParser
@@ -65,6 +66,18 @@ def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text="応答です。 " + event.message.text))
+
+
+@handler.add(FollowEvent)
+def handle_follow(event):
+    app.logger.info("Got Follow event:" + event.source.user_id)
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text='Got follow event'))
+
+
+@handler.add(UnfollowEvent)
+def handle_unfollow(event):
+    app.logger.info("Got Unfollow event:" + event.source.user_id)
 
 
 if __name__ == "__main__":
