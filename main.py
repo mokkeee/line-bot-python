@@ -16,16 +16,34 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent,
 )
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'consoleHandler': {
+        'class': 'logging.StreamHandler',
+        'level': 'INFO',
+        'formatter': 'default',
+        'stream': 'ext://sys.stdout'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['consoleHandler']
+    }
+})
 
 app = Flask(__name__)
 
-root = logging.getLogger()
-root.addHandler(default_handler)
+# root = logging.getLogger()
+# root.addHandler(default_handler)
 
 # 環境変数取得
 # LINE Developersで設定されているチャネルアクセストークンとチャネルシークレットを設定
-YOUR_CHANNEL_ACCESS_TOKEN = os.environ["CHANNEL_ACCESS_TOKEN"]
-YOUR_CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
+YOUR_CHANNEL_ACCESS_TOKEN = os.environ['CHANNEL_ACCESS_TOKEN']
+YOUR_CHANNEL_SECRET = os.environ['CHANNEL_SECRET']
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
