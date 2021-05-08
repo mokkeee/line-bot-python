@@ -8,7 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    UnfollowEvent, FollowEvent,
+    UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent,
 )
 import os
 from argparse import ArgumentParser
@@ -78,6 +78,18 @@ def handle_follow(event):
 @handler.add(UnfollowEvent)
 def handle_unfollow(event):
     app.logger.info("Got Unfollow event:" + event.source.user_id)
+
+
+@handler.add(JoinEvent)
+def handle_join(event):
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text='Joined this ' + event.source.type))
+
+
+@handler.add(LeaveEvent)
+def handle_leave():
+    app.logger.info("Got leave event")
 
 
 if __name__ == "__main__":
