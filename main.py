@@ -1,4 +1,10 @@
+import logging
+import os
+from argparse import ArgumentParser
+
 from flask import Flask, request, abort
+
+from flask.logging import default_handler
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -10,10 +16,11 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent,
 )
-import os
-from argparse import ArgumentParser
 
 app = Flask(__name__)
+
+root = logging.getLogger()
+root.addHandler(default_handler)
 
 # 環境変数取得
 # LINE Developersで設定されているチャネルアクセストークンとチャネルシークレットを設定
