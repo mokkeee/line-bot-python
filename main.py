@@ -1,6 +1,7 @@
-import logging
 import os
+
 from argparse import ArgumentParser
+from logging.config import dictConfig
 
 from flask import Flask, request, abort
 
@@ -16,8 +17,8 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent,
 )
-from logging.config import dictConfig
 
+# 標準出力にログ出力することで、Herokuのログに出力する
 dictConfig({
     'version': 1,
     'formatters': {'default': {
@@ -95,14 +96,14 @@ def handle_message(event):
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    app.logger.info("Got Follow event:" + event.source.user_id)
+    app.logger.info("Got Follow event: userId=" + event.source.user_id)
     line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text='Got follow event'))
 
 
 @handler.add(UnfollowEvent)
 def handle_unfollow(event):
-    app.logger.info("Got Unfollow event:" + event.source.user_id)
+    app.logger.info("Got Unfollow event: user_id" + event.source.user_id)
 
 
 @handler.add(JoinEvent)
